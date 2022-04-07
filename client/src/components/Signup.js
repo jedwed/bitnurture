@@ -7,11 +7,17 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { FormControl } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const Signup = ({ onSignup }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (e) => e.preventDefault();
 
   const checkPassword = () => {
     if (password.length < 12) {
@@ -30,7 +36,7 @@ const Signup = ({ onSignup }) => {
       return;
     }
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       alert("The two passwords do not match");
       return;
     }
@@ -47,15 +53,29 @@ const Signup = ({ onSignup }) => {
           type="email"
           label="Email address"
           onChange={(e) => setEmail(e.target.value)}
-          variant="standard"
+          variant="filled"
           fullWidth
         />
         <TextField
-          type="password"
+          type={showPassword ? "text" : "password"}
           label="Master Password"
           onChange={(e) => setPassword(e.target.value)}
-          variant="standard"
+          variant="filled"
           fullWidth
+          InputProps={{
+            // <-- This is where the toggle button is added.
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </div>
       <Typography variant="caption">
@@ -66,11 +86,25 @@ const Signup = ({ onSignup }) => {
       </Typography>
       <div className="inputFields">
         <TextField
-          type="password"
+          type={showPassword ? "text" : "password"}
           label="Confirm Master Password"
           onChange={(e) => setConfirmPassword(e.target.value)}
-          variant="standard"
+          variant="filled"
           fullWidth
+          InputProps={{
+            // <-- This is where the toggle button is added.
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </div>
       <FormFooter onSubmit={handleSubmit} />

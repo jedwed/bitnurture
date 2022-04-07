@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "@mui/material/Button";
-// import LoginIcon from "@mui/icons-material/Login";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 
 const Home = () => {
@@ -16,8 +18,8 @@ const Home = () => {
           variant="outlined"
           style={{ margin: 5 }}
         >
-          {/* <LoginIcon /> */}
-          Login
+          <LoginIcon style={{ marginRight: 10 }} />
+          <Typography>Login</Typography>
         </Button>
         <Button
           component={Link}
@@ -25,7 +27,8 @@ const Home = () => {
           variant="outlined"
           style={{ margin: 5 }}
         >
-          Sign Up
+          <PersonAddIcon style={{ marginRight: 10 }} />
+          <Typography>Sign Up</Typography>
         </Button>
       </div>
     </div>
