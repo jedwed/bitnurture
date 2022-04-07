@@ -1,6 +1,6 @@
 import React from "react";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
+import LoginIcon from "@mui/icons-material/Login";
 import { Link } from "react-router-dom";
 
 const Home = () => {
@@ -16,6 +16,7 @@ const Home = () => {
           variant="outlined"
           style={{ margin: 5 }}
         >
+          <LoginIcon />
           Login
         </Button>
         <Button

@@ -6,5 +6,9 @@ app = Flask(__name__)
 def user_register():
     return "Hello COMP6841! :)"
 
+@app.route("/login")
+def user_login():
+    return "Yes"
+
 if __name__ == "__main__":
     app.run()
