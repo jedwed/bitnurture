@@ -1,6 +1,6 @@
 body {
   font-family: Arial;
-  font-size: 18px;
+  /* font-size: 18px; */
   /* display: flex;
   justify-content: center; */
 }
@@ -22,6 +22,11 @@ body {
 }
 
 .formFooter {
+  margin-top: 10px;
   display: flex;
   justify-content: space-between
+}
+
+.inputFields {
+  margin: 10px;
 }
