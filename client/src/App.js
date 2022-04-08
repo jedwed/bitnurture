@@ -5,7 +5,16 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 
 function App() {
-  const signupUser = (email, password, confirmPassword) => {
+  const signupUser = async (email, password, confirmPassword) => {
+    const newUser = { email, password };
+    const response = await fetch("http://127.0.0.1:5000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(newUser),
+    });
     return true;
   };
   return (

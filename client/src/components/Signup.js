@@ -17,7 +17,6 @@ const Signup = ({ onSignup }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = (e) => e.preventDefault();
 
   const checkPassword = () => {
     if (password.length < 12) {
@@ -66,11 +65,7 @@ const Signup = ({ onSignup }) => {
             // <-- This is where the toggle button is added.
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                >
+                <IconButton onClick={handleClickShowPassword}>
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
@@ -95,11 +90,7 @@ const Signup = ({ onSignup }) => {
             // <-- This is where the toggle button is added.
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                >
+                <IconButton onClick={handleClickShowPassword}>
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
