@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -9,9 +9,43 @@ import VaultViewItem from "./components/VaultViewItem";
 import CryptoJS from "crypto-js";
 
 function App() {
+  const [activeEmail, setActiveEmail] = useState("");
   const [activeMasterKey, setActiveMasterKey] = useState("");
   const [activeAuthHash, setActiveAuthHash] = useState("");
   const [vault, setVault] = useState([]);
+
+  useEffect(() => {
+    const fetchVault = async () => {
+      if (!activeEmail || !activeMasterKey || !activeAuthHash) {
+        return;
+      }
+
+      const requestBody = {
+        email: activeEmail,
+        authHash: activeAuthHash,
+      };
+
+      const response = await fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify(requestBody),
+      });
+      const fetchedVault = await response.json();
+      setVault(
+        fetchedVault.map((vaultItem) => {
+          return {
+            ...vaultItem,
+            password: decryptPassword(vaultItem.password),
+          };
+        })
+      );
+    };
+
+    fetchVault();
+  });
 
   const encryptPassword = (password) => {
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
@@ -101,16 +135,18 @@ function App() {
       return error;
     }
     const returnedVault = await response.json();
+    setActiveEmail(email);
     setActiveMasterKey(currMasterKey);
     setActiveAuthHash(currAuthHash);
-    setVault(
-      returnedVault.map((vaultItem) => {
-        return { ...vaultItem, password: decryptPassword(vaultItem.password) };
-      })
-    );
+    // setVault(
+    //   returnedVault.map((vaultItem) => {
+    //     return { ...vaultItem, password: decryptPassword(vaultItem.password) };
+    //   })
+    // );
   };
 
   const logoutUser = () => {
+    setActiveEmail("");
     setActiveMasterKey("");
     setActiveAuthHash("");
     setVault([]);

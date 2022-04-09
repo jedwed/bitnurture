@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
+import VaultItemAdd from "./VaultItemAdd";
 import { Link } from "react-router-dom";
 
 const FormFooter = ({ onLogout, onAdd }) => {
@@ -11,9 +12,10 @@ const FormFooter = ({ onLogout, onAdd }) => {
         Logout
       </Button>
 
-      <Button variant="contained" onClick={onAdd}>
-        Submit
-      </Button>
+      <VaultItemAdd onAdd={onAdd} />
+      {/* <Button variant="contained" onClick={onAdd}>
+        New Vault Item
+      </Button> */}
     </div>
   );
 };
