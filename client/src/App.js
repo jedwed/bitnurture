@@ -1,15 +1,12 @@
-import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Vault from "./components/Vault";
-import PBKDF2 from "crypto-js/pbkdf2";
-import AES from "crypto-js/aes";
+import VaultViewItem from "./components/VaultViewItem";
 import CryptoJS from "crypto-js";
-import Hex from "crypto-js/enc-hex";
-import VaultItem from "./components/VaultItem";
 
 function App() {
   const [activeMasterKey, setActiveMasterKey] = useState("");
@@ -18,30 +15,41 @@ function App() {
 
   const encryptPassword = (password) => {
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const encryptedPassword = AES.encrypt(password, activeMasterKey, {
+    const encryptedPassword = CryptoJS.AES.encrypt(password, activeMasterKey, {
       iv: iv,
+      padding: CryptoJS.pad.Pcks7,
+      mode: CryptoJS.mode.CBC,
     });
-    return encryptedPassword;
+    return encryptedPassword.toString();
   };
 
   const decryptPassword = (encryptedPassword, iv) => {
-    AES.decrypt(encryptedPassword, activeMasterKey, {
-      iv: iv,
-    });
+    const decryptedPassword = CryptoJS.AES.decrypt(
+      encryptedPassword,
+      activeMasterKey,
+      {
+        iv: iv,
+        padding: CryptoJS.pad.Pcks7,
+        mode: CryptoJS.mode.CBC,
+      }
+    );
+    return decryptedPassword.toString(CryptoJS.enc.Utf8);
   };
 
   const deriveMasterKey = (email, masterPassword) => {
-    return PBKDF2(masterPassword, email, {
+    return CryptoJS.PBKDF2(masterPassword, email, {
       iterations: 100000,
       keySize: 256 / 32,
+      hasher: CryptoJS.algo.SHA256,
     });
   };
 
   const deriveAuthHash = (masterKey, masterPassword) => {
-    return PBKDF2(masterKey, masterPassword, {
+    return CryptoJS.PBKDF2(masterKey, masterPassword, {
       iterations: 10000,
       keySize: 256 / 32,
-    }).toString(Hex);
+      hasher: CryptoJS.algo.SHA256,
+    }).toString(CryptoJS.enc.Hex);
   };
 
   const signupUser = async (email, password) => {
@@ -132,6 +140,7 @@ function App() {
               />
             }
           />
+          <Route path="/vault/viewItem" element={<VaultViewItem />} />
         </Routes>
       </div>
     </Router>

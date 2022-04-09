@@ -6,11 +6,12 @@ import { Link } from "react-router-dom";
 const FormFooter = ({ onLogout, onAdd }) => {
   return (
     <div className="footer">
-      <Button variant="text" component={Link} to="/">
-        Cancel
+      <Button variant="text" onClick={onLogout}>
+        <LogoutIcon />
+        Logout
       </Button>
 
-      <Button variant="contained" onClick={onSubmit}>
+      <Button variant="contained" onClick={onAdd}>
         Submit
       </Button>
     </div>
