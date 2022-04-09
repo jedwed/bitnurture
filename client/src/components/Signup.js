@@ -31,6 +31,7 @@ const Signup = ({ onSignup }) => {
       alert("Please enter your email");
       return;
     }
+
     if (!checkPassword()) {
       alert("Master password must be at least 12 characters");
       return;
@@ -43,7 +44,7 @@ const Signup = ({ onSignup }) => {
 
     const err = await onSignup(email, password);
     if (err) {
-      alert("Email is already registered");
+      alert(err);
       return;
     }
     setEmail("");

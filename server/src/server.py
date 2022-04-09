@@ -1,5 +1,6 @@
 from flask import Flask, request, Response
 from flask_cors import CORS
+from uuid import uuid4
 from json import dumps
 import sqlite3
 import os
@@ -10,7 +11,8 @@ CORS(app)
 
 DATABASE = 'data.db'
 
-def query_db(query, args=(), one=False):
+# Execute a sqlite3 command
+def db_query(query, args=(), one=False):
     con = sqlite3.connect(DATABASE)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
@@ -20,8 +22,25 @@ def query_db(query, args=(), one=False):
     # return res
     return (res[0] if res else None) if one else [dict(zip(row.keys(), row)) for row in res]
 
-def init_db():
-    query_db("CREATE TABLE IF NOT EXISTS users (email text, hashId text, salt text)")
+# Initialize database
+def db_init():
+    db_query("CREATE TABLE IF NOT EXISTS users (email text, hashid text, salt text)")
+    db_query("CREATE TABLE IF NOT EXISTS vault (id text, email text, name text, username text, password text, iv text)")
+
+# Checks if the auth_hash is valid for the account
+def user_authenticate(email, auth_hash):
+    db_response = db_query("SELECT * FROM users WHERE email = (?)", (email, ), True)
+    if db_response is None:
+        return False
+
+    salt = bytes.fromhex(db_response['salt'])
+    hashid = pbkdf2_hmac('sha256', auth_hash.encode(), salt, 100000).hex()
+
+    if hashid != db_response['hashid']:
+        return False
+
+    return True
+
 
 @app.route("/register", methods=['POST'])
 def user_register():
@@ -29,37 +48,43 @@ def user_register():
     auth_hash = request.get_json()['authHash']
 
     # If user already exists, return an error
-    db_response = query_db("SELECT * FROM users WHERE email = (?)", (email, ), True)
+    db_response = db_query("SELECT * FROM users WHERE email = (?)", (email, ), True)
     if (db_response):
         return Response(dumps({"error": "Email is already registered"}), status=409, mimetype="application/json")
     salt = os.urandom(32)
 
-    hashId = pbkdf2_hmac('sha256', auth_hash.encode(), salt, 100000).hex() 
-    query_db("INSERT INTO users VALUES (?, ?, ?)", (email, hashId, salt.hex()))
+    hashid = pbkdf2_hmac('sha256', auth_hash.encode(), salt, 100000).hex() 
+    db_query("INSERT INTO users VALUES (?, ?, ?)", (email, hashid, salt.hex()))
     return dumps({})
 
 @app.route("/login", methods=['POST'])
 def user_login():
     email = request.get_json()['email']
     auth_hash = request.get_json()['authHash']
-    try:
-        db_response = query_db("SELECT * FROM users WHERE email = (?)", (email, ), True)
-        # salt = bytes.fromhex(query_db("SELECT * FROM users WHERE email = (?) LIMIT 1", (email, ))[0]['salt'])
-        salt = bytes.fromhex(db_response['salt'])
-        hash_id = pbkdf2_hmac('sha256', auth_hash.encode(), salt, 100000).hex()
-        # print(hash_id)
-        # print(db_response['hashId'])
-        return "The user's vault"
-    except:
+
+    if not user_authenticate(email, auth_hash):
         return Response(dumps({"error": "Email or password is invalid"}), status=401, mimetype="application/json")
 
-@app.route("/get", methods=['GET'])
-def test():
-    a = query_db("SELECT * FROM users")
-    return dumps(a)
+    user_vault = db_query("SELECT * FROM vault WHERE email = (?)", (email,))
+    return dumps(user_vault)
 
-# @app.route("/")
+
+@app.route("/vault", methods=['POST'])
+def vault_insert():
+    # Authenticate user with their authHash
+    email = request.get_json()['email']
+    auth_hash = request.get_json()['authHash']
+    encrypted_password = request.get_json()['password']
+    iv = request.get_json()['iv']
+
+    if not user_authenticate(email, auth_hash):
+        return Response(dumps({"error": "Email or password is invalid"}), status=401, mimetype="application/json")
+
+    newid = str(uuid4())
+    db_query("INSERT INTO vault VALUES (?, ?, ?, ?)", (newid, email, encrypted_password, iv))
+    return dumps({})
+
 
 if __name__ == "__main__":
-    init_db()
+    db_init()
     app.run(debug=True)
