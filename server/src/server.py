@@ -27,13 +27,16 @@ def init_db():
 def user_register():
     email = request.get_json()['email']
     auth_hash = request.get_json()['authHash']
+
+    # If user already exists, return an error
+    db_response = query_db("SELECT * FROM users WHERE email = (?)", (email, ), True)
+    if (db_response):
+        return Response(dumps({"error": "Email is already registered"}), status=409, mimetype="application/json")
     salt = os.urandom(32)
+
     hashId = pbkdf2_hmac('sha256', auth_hash.encode(), salt, 100000).hex() 
-    print(hashId)
-
-
     query_db("INSERT INTO users VALUES (?, ?, ?)", (email, hashId, salt.hex()))
-    return "Hello COMP6841! :)"
+    return dumps({})
 
 @app.route("/login", methods=['POST'])
 def user_login():

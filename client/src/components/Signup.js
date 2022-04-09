@@ -4,7 +4,7 @@ import FormFooter from "./FormFooter";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { FormControl } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -16,6 +16,7 @@ const Signup = ({ onSignup }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const checkPassword = () => {
@@ -25,7 +26,7 @@ const Signup = ({ onSignup }) => {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!email) {
       alert("Please enter your email");
       return;
@@ -39,10 +40,16 @@ const Signup = ({ onSignup }) => {
       alert("The two passwords do not match");
       return;
     }
-    onSignup(email, password);
-    // setEmail("");
-    // setPassword("");
-    // setConfirmPassword("");
+
+    const err = await onSignup(email, password);
+    if (err) {
+      alert("Email is already registered");
+      return;
+    }
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setRedirect(true);
   };
 
   return (
@@ -99,6 +106,7 @@ const Signup = ({ onSignup }) => {
         />
       </div>
       <FormFooter onSubmit={handleSubmit} />
+      {redirect && <Navigate replace to="/" />}
     </div>
   );
 };

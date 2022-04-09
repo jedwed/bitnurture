@@ -6,5 +6,11 @@
   "action": {
       "default_popup": "index.html",
       "default_title": "BitNurture"
+  },
+  "icons": {
+    "16": "favicon-16x16.png",
+    "32": "favicon-32x32.png",
+    "192": "android-chrome-192x192.png",
+    "512": "android-chrome-512x512.png"
   }
 }

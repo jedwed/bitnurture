@@ -37,6 +37,7 @@ function App() {
       email,
       authHash: newAuthHash,
     };
+
     const response = await fetch("http://127.0.0.1:5000/register", {
       method: "POST",
       headers: {
@@ -45,8 +46,15 @@ function App() {
       mode: "cors",
       body: JSON.stringify(requestBody),
     });
-    return true;
+
+    if (!response.ok) {
+      return true;
+    }
+    setActiveMasterKey(newMasterKey);
+    setActiveAuthHash(newAuthHash);
+    return false;
   };
+
   return (
     <Router>
       <div className="container">
