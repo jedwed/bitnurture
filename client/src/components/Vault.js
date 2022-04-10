@@ -17,9 +17,9 @@ const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete }) => {
   return (
     <div>
       <List>
-        {vault.map((vaultItem) => {
-          <VaultItem vaultItem={vaultItem} />;
-        })}
+        {vault.map((vaultItem) => (
+          <VaultItem vaultItem={vaultItem} />
+        ))}
       </List>
       <VaultFooter onLogout={handleLogout} onAdd={onAdd} />
       {logoutRedirect && <Navigate replace to="/" />}

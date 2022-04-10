@@ -15,13 +15,17 @@ const encrypted = CryptoJS.AES.encrypt(password, masterKey, {
     iv: iv,
     padding: CryptoJS.pad.Pkcs7,
     mode: CryptoJS.mode.CBC
-}).toString()
+})
 
-console.log(encrypted)
+const encString = encrypted.toString()
+const ivString = iv.toString()
+console.log(ivString)
+
+const newiv = CryptoJS.enc.Hex.parse(ivString)
 
 
-const decrypted = CryptoJS.AES.decrypt(encrypted, masterKey, {
-    iv: iv,
+const decrypted = CryptoJS.AES.decrypt(encString, masterKey, {
+    iv: newiv,
     padding: CryptoJS.pad.Pkcs7,
     mode: CryptoJS.mode.CBC
 }).toString(CryptoJS.enc.Utf8)

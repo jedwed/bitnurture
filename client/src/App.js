@@ -38,7 +38,10 @@ function App() {
         fetchedVault.map((vaultItem) => {
           return {
             ...vaultItem,
-            password: decryptPassword(vaultItem.password),
+            password: decryptPassword(
+              vaultItem.password,
+              CryptoJS.enc.Hex.parse(vaultItem.iv)
+            ),
           };
         })
       );
@@ -51,10 +54,10 @@ function App() {
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
     const encryptedPassword = CryptoJS.AES.encrypt(password, activeMasterKey, {
       iv: iv,
-      padding: CryptoJS.pad.Pcks7,
+      padding: CryptoJS.pad.Pkcs7,
       mode: CryptoJS.mode.CBC,
     });
-    return encryptedPassword.toString();
+    return [encryptedPassword.toString(), iv.toString()];
   };
 
   const decryptPassword = (encryptedPassword, iv) => {
@@ -63,7 +66,7 @@ function App() {
       activeMasterKey,
       {
         iv: iv,
-        padding: CryptoJS.pad.Pcks7,
+        padding: CryptoJS.pad.Pkcs7,
         mode: CryptoJS.mode.CBC,
       }
     );
@@ -138,11 +141,6 @@ function App() {
     setActiveEmail(email);
     setActiveMasterKey(currMasterKey);
     setActiveAuthHash(currAuthHash);
-    // setVault(
-    //   returnedVault.map((vaultItem) => {
-    //     return { ...vaultItem, password: decryptPassword(vaultItem.password) };
-    //   })
-    // );
   };
 
   const logoutUser = () => {
@@ -152,7 +150,27 @@ function App() {
     setVault([]);
   };
 
-  const addVaultItem = () => {};
+  const addVaultItem = async (name, username, password) => {
+    const [encryptedPassword, iv] = encryptPassword(password);
+
+    const requestBody = {
+      email: activeEmail,
+      authHash: activeAuthHash,
+      name: name,
+      username: username,
+      password: encryptedPassword,
+      iv: iv,
+    };
+
+    const response = await fetch("http://127.0.0.1:5000/vault", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(requestBody),
+    });
+  };
   const editVaultItem = () => {};
   const deleteVaultItem = () => {};
 

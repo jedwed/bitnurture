@@ -74,6 +74,8 @@ def vault_insert():
     # Authenticate user with their authHash
     email = request.get_json()['email']
     auth_hash = request.get_json()['authHash']
+    name = request.get_json()['name']
+    username = request.get_json()['username']
     encrypted_password = request.get_json()['password']
     iv = request.get_json()['iv']
 
@@ -81,7 +83,7 @@ def vault_insert():
         return Response(dumps({"error": "Email or password is invalid"}), status=401, mimetype="application/json")
 
     newid = str(uuid4())
-    db_query("INSERT INTO vault VALUES (?, ?, ?, ?)", (newid, email, encrypted_password, iv))
+    db_query("INSERT INTO vault VALUES (?, ?, ?, ?, ?, ?)", (newid, email, name, username, encrypted_password, iv))
     return dumps({})
 
 

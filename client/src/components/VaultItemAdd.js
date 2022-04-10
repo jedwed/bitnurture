@@ -6,6 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
+import AddIcon from "@mui/icons-material/Add";
 
 const VaultItemAdd = ({ onAdd }) => {
   const [open, setOpen] = useState(false);
@@ -21,20 +22,23 @@ const VaultItemAdd = ({ onAdd }) => {
     setOpen(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name) {
       alert("Please enter the name of the Vault Item");
+      return;
     }
 
     if (!username) {
       alert("Please enter the username of the Vault Item");
+      return;
     }
 
     if (!password) {
       alert("Please enter the password of the Vault Item");
+      return;
     }
 
-    onAdd(name, username, password);
+    await onAdd(name, username, password);
     setName("");
     setUsername("");
     setPassword("");
@@ -44,6 +48,7 @@ const VaultItemAdd = ({ onAdd }) => {
   return (
     <>
       <Button variant="contained" onClick={handleClickOpen}>
+        <AddIcon />
         New Vault Item
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -59,14 +64,14 @@ const VaultItemAdd = ({ onAdd }) => {
           <TextField
             type="text"
             label="Username"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             variant="filled"
             fullWidth
           />
           <TextField
             type="password"
             label="Password"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             variant="filled"
             fullWidth
           />
@@ -75,7 +80,9 @@ const VaultItemAdd = ({ onAdd }) => {
           <Button variant="text" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="contained">Add</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
     </>

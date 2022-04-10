@@ -3,11 +3,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import { fabClasses } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 const VaultItem = ({ vaultItem }) => {
-  const [view, setView] = useState(fabClasses);
+  const [view, setView] = useState(false);
   const handleClickView = () => {
     setView(true);
   };
