@@ -1,8 +1,6 @@
 import { useState } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -18,9 +16,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Typography from "@mui/material/Typography";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
   const [open, setOpen] = useState(false);
+  const [copyAlert, setCopyAlert] = useState(false);
   const [name, setName] = useState(vaultItem.name);
   const [username, setUsername] = useState(vaultItem.username);
   const [password, setPassword] = useState(vaultItem.password);
@@ -67,6 +68,11 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(password);
+    setCopyAlert(true);
+  };
+
+  const handleCloseCopyAlert = () => {
+    setCopyAlert(false);
   };
 
   return (
@@ -134,6 +140,15 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={copyAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseCopyAlert}
+      >
+        <Alert onClose={handleCloseCopyAlert} severity="success">
+          Password successfully copied!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
