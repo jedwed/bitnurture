@@ -7,12 +7,19 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import LockResetIcon from "@mui/icons-material/LockReset";
 
-const VaultItemAdd = ({ onAdd }) => {
+const VaultItemAdd = ({ onAdd, onGenerate }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -45,6 +52,11 @@ const VaultItemAdd = ({ onAdd }) => {
     setOpen(false);
   };
 
+  const handleGenerate = () => {
+    const generatedPassword = onGenerate();
+    setPassword(generatedPassword);
+  };
+
   return (
     <>
       <Button variant="contained" onClick={handleClickOpen}>
@@ -69,11 +81,25 @@ const VaultItemAdd = ({ onAdd }) => {
             fullWidth
           />
           <TextField
-            type="password"
+            type={showPassword ? "text" : "password"}
+            value={password}
             label="Password"
             onChange={(e) => setPassword(e.target.value)}
             variant="filled"
             fullWidth
+            InputProps={{
+              // <-- This is where the toggle button is added.
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                  <IconButton onClick={handleGenerate}>
+                    <LockResetIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </DialogContent>
         <DialogActions>

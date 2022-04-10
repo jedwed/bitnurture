@@ -5,7 +5,7 @@ import VaultItem from "./VaultItem";
 import VaultFooter from "./VaultFooter";
 import List from "@mui/material/List";
 
-const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete }) => {
+const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete, onGenerate }) => {
   const [logoutRedirect, setLogoutRedirect] = useState(false);
   const [viewRedirect, setViewRedirect] = useState(false);
 
@@ -18,10 +18,19 @@ const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete }) => {
     <div>
       <List>
         {vault.map((vaultItem) => (
-          <VaultItem vaultItem={vaultItem} />
+          <VaultItem
+            vaultItem={vaultItem}
+            key={vaultItem.id}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         ))}
       </List>
-      <VaultFooter onLogout={handleLogout} onAdd={onAdd} />
+      <VaultFooter
+        onLogout={handleLogout}
+        onAdd={onAdd}
+        onGenerate={onGenerate}
+      />
       {logoutRedirect && <Navigate replace to="/" />}
       {viewRedirect && <Navigate replace to="/vault/viewItem" />}
     </div>

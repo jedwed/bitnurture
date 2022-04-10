@@ -80,10 +80,38 @@ def vault_insert():
     iv = request.get_json()['iv']
 
     if not user_authenticate(email, auth_hash):
-        return Response(dumps({"error": "Email or password is invalid"}), status=401, mimetype="application/json")
+        return Response(dumps({"error": "User is not authenticated"}), status=401, mimetype="application/json")
 
     newid = str(uuid4())
     db_query("INSERT INTO vault VALUES (?, ?, ?, ?, ?, ?)", (newid, email, name, username, encrypted_password, iv))
+    return dumps({})
+
+@app.route("/vault", methods=['DELETE'])
+def vault_delete():
+    email = request.get_json()['email']
+    auth_hash = request.get_json()['authHash']
+    itemid = request.get_json()['id']
+
+    if not user_authenticate(email, auth_hash):
+        return Response(dumps({"error": "User is not authenticated"}), status=401, mimetype="application/json")
+
+    db_query("DELETE FROM vault WHERE id = (?)", (itemid, ))
+    return dumps({})
+
+@app.route("/vault", methods=['PUT'])
+def vault_edit():
+    email = request.get_json()['email']
+    auth_hash = request.get_json()['authHash']
+    itemid = request.get_json()['id']
+    name = request.get_json()['name']
+    username = request.get_json()['username']
+    encrypted_password = request.get_json()['password']
+    iv = request.get_json()['iv']
+
+    if not user_authenticate(email, auth_hash):
+        return Response(dumps({"error": "User is not authenticated"}), status=401, mimetype="application/json")
+
+    db_query("UPDATE vault SET name = (?), username = (?), password = (?), iv = (?) WHERE id = (?)", (name, username, encrypted_password, iv, itemid))
     return dumps({})
 
 

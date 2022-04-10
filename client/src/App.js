@@ -1,4 +1,4 @@
-import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -150,6 +150,17 @@ function App() {
     setVault([]);
   };
 
+  const generatePassword = () => {
+    const length = 16;
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(),./;'[]-=<>?:{}_+";
+    let password = "";
+    for (let i = 0; i < 16; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+  };
+
   const addVaultItem = async (name, username, password) => {
     const [encryptedPassword, iv] = encryptPassword(password);
 
@@ -171,8 +182,46 @@ function App() {
       body: JSON.stringify(requestBody),
     });
   };
-  const editVaultItem = () => {};
-  const deleteVaultItem = () => {};
+
+  const deleteVaultItem = async (id) => {
+    const requestBody = {
+      email: activeEmail,
+      authHash: activeAuthHash,
+      id: id,
+    };
+
+    const response = await fetch("http://127.0.0.1:5000/vault", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(requestBody),
+    });
+  };
+
+  const editVaultItem = async (id, name, username, password) => {
+    const [encryptedPassword, iv] = encryptPassword(password);
+
+    const requestBody = {
+      email: activeEmail,
+      authHash: activeAuthHash,
+      id: id,
+      name: name,
+      username: username,
+      password: encryptedPassword,
+      iv: iv,
+    };
+
+    const response = await fetch("http://127.0.0.1:5000/vault", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(requestBody),
+    });
+  };
 
   return (
     <Router>
@@ -191,6 +240,7 @@ function App() {
                 onAdd={addVaultItem}
                 onEdit={editVaultItem}
                 onDelete={deleteVaultItem}
+                onGenerate={generatePassword}
               />
             }
           />

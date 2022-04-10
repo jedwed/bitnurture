@@ -4,7 +4,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import VaultItemAdd from "./VaultItemAdd";
 import { Link } from "react-router-dom";
 
-const FormFooter = ({ onLogout, onAdd }) => {
+const FormFooter = ({ onLogout, onAdd, onGenerate }) => {
   return (
     <div className="footer">
       <Button variant="text" onClick={onLogout}>
@@ -12,10 +12,7 @@ const FormFooter = ({ onLogout, onAdd }) => {
         Logout
       </Button>
 
-      <VaultItemAdd onAdd={onAdd} />
-      {/* <Button variant="contained" onClick={onAdd}>
-        New Vault Item
-      </Button> */}
+      <VaultItemAdd onAdd={onAdd} onGenerate={onGenerate} />
     </div>
   );
 };
