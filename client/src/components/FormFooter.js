@@ -1,16 +1,17 @@
 import React from "react";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 
 const FormFooter = ({ onSubmit }) => {
   return (
     <div className="footer">
       <Button variant="text" component={Link} to="/">
-        Cancel
+        <Typography>Cancel</Typography>
       </Button>
 
       <Button variant="contained" onClick={onSubmit}>
-        Submit
+        <Typography>Submit</Typography>
       </Button>
     </div>
   );

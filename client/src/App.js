@@ -5,7 +5,6 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Vault from "./components/Vault";
-import VaultViewItem from "./components/VaultViewItem";
 import CryptoJS from "crypto-js";
 
 function App() {
@@ -14,6 +13,7 @@ function App() {
   const [activeAuthHash, setActiveAuthHash] = useState("");
   const [vault, setVault] = useState([]);
 
+  // Constantly fetches the vault from the server
   useEffect(() => {
     const fetchVault = async () => {
       if (!activeEmail || !activeMasterKey || !activeAuthHash) {
@@ -50,6 +50,7 @@ function App() {
     fetchVault();
   });
 
+  // Encrypt user-provided/generated password, return both the encrypted password and initialization vector
   const encryptPassword = (password) => {
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
     const encryptedPassword = CryptoJS.AES.encrypt(password, activeMasterKey, {
@@ -60,6 +61,7 @@ function App() {
     return [encryptedPassword.toString(), iv.toString()];
   };
 
+  // Decrypts provided encrypted password
   const decryptPassword = (encryptedPassword, iv) => {
     const decryptedPassword = CryptoJS.AES.decrypt(
       encryptedPassword,
@@ -73,6 +75,7 @@ function App() {
     return decryptedPassword.toString(CryptoJS.enc.Utf8);
   };
 
+  // Generate a 256-bit AES master key to encrypt/decrypt vault
   const deriveMasterKey = (email, masterPassword) => {
     return CryptoJS.PBKDF2(masterPassword, email, {
       iterations: 100000,
@@ -81,6 +84,7 @@ function App() {
     });
   };
 
+  // Generate the hash that gets sent to the server for authentication
   const deriveAuthHash = (masterKey, masterPassword) => {
     return CryptoJS.PBKDF2(masterKey, masterPassword, {
       iterations: 10000,
@@ -89,6 +93,7 @@ function App() {
     }).toString(CryptoJS.enc.Hex);
   };
 
+  // Create new account
   const signupUser = async (email, password) => {
     const newMasterKey = deriveMasterKey(email, password);
     const newAuthHash = deriveAuthHash(newMasterKey, password);
@@ -114,6 +119,7 @@ function App() {
     }
   };
 
+  // Login
   const loginUser = async (email, password) => {
     const currMasterKey = deriveMasterKey(email, password);
     const currAuthHash = deriveAuthHash(currMasterKey, password);
@@ -150,6 +156,7 @@ function App() {
     setVault([]);
   };
 
+  // Generates a random 16-character password
   const generatePassword = () => {
     const length = 16;
     const charset =
@@ -161,6 +168,7 @@ function App() {
     return password;
   };
 
+  // Insert item into vault
   const addVaultItem = async (name, username, password) => {
     const [encryptedPassword, iv] = encryptPassword(password);
 
@@ -183,6 +191,7 @@ function App() {
     });
   };
 
+  // Delete item in vault
   const deleteVaultItem = async (id) => {
     const requestBody = {
       email: activeEmail,
@@ -200,6 +209,7 @@ function App() {
     });
   };
 
+  // Edit item in vault
   const editVaultItem = async (id, name, username, password) => {
     const [encryptedPassword, iv] = encryptPassword(password);
 
@@ -244,7 +254,6 @@ function App() {
               />
             }
           />
-          <Route path="/vault/viewItem" element={<VaultViewItem />} />
         </Routes>
       </div>
     </Router>

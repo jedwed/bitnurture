@@ -1,5 +1,4 @@
 import { useState } from "react";
-import FormFooter from "./FormFooter";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -46,6 +45,7 @@ const VaultItemAdd = ({ onAdd, onGenerate }) => {
     }
 
     await onAdd(name, username, password);
+
     setName("");
     setUsername("");
     setPassword("");

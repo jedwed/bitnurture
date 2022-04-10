@@ -67,6 +67,7 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
   };
 
   const handleCopy = () => {
+    // Copies the password to clipboard
     navigator.clipboard.writeText(password);
     setCopyAlert(true);
   };

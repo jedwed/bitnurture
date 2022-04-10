@@ -43,10 +43,12 @@ const Signup = ({ onSignup }) => {
     }
 
     const err = await onSignup(email, password);
+    // An error will occur if the email is already registered
     if (err) {
       alert(err);
       return;
     }
+
     setEmail("");
     setPassword("");
     setConfirmPassword("");

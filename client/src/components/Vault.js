@@ -7,7 +7,6 @@ import List from "@mui/material/List";
 
 const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete, onGenerate }) => {
   const [logoutRedirect, setLogoutRedirect] = useState(false);
-  const [viewRedirect, setViewRedirect] = useState(false);
 
   const handleLogout = () => {
     onLogout();
@@ -32,7 +31,6 @@ const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete, onGenerate }) => {
         onGenerate={onGenerate}
       />
       {logoutRedirect && <Navigate replace to="/" />}
-      {viewRedirect && <Navigate replace to="/vault/viewItem" />}
     </div>
   );
 };

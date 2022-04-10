@@ -51,14 +51,16 @@ def user_register():
     db_response = db_query("SELECT * FROM users WHERE email = (?)", (email, ), True)
     if (db_response):
         return Response(dumps({"error": "Email is already registered"}), status=409, mimetype="application/json")
-    salt = os.urandom(32)
 
+    # Hashes and salts with a random salt before storing in the database
+    salt = os.urandom(32)
     hashid = pbkdf2_hmac('sha256', auth_hash.encode(), salt, 100000).hex() 
     db_query("INSERT INTO users VALUES (?, ?, ?)", (email, hashid, salt.hex()))
     return dumps({})
 
 @app.route("/login", methods=['POST'])
 def user_login():
+    # Returns the user's vault
     email = request.get_json()['email']
     auth_hash = request.get_json()['authHash']
 
@@ -117,4 +119,4 @@ def vault_edit():
 
 if __name__ == "__main__":
     db_init()
-    app.run(debug=True)
+    app.run()
