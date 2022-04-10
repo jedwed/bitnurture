@@ -19,7 +19,6 @@ def db_query(query, args=(), one=False):
     res = cur.execute(query, args).fetchall()
     con.commit()
     con.close()
-    # return res
     return (res[0] if res else None) if one else [dict(zip(row.keys(), row)) for row in res]
 
 # Initialize database
@@ -27,7 +26,7 @@ def db_init():
     db_query("CREATE TABLE IF NOT EXISTS users (email text, hashid text, salt text)")
     db_query("CREATE TABLE IF NOT EXISTS vault (id text, email text, name text, username text, password text, iv text)")
 
-# Checks if the auth_hash is valid for the account
+# Authenticates a user given their auth_hash they sent to the server
 def user_authenticate(email, auth_hash):
     db_response = db_query("SELECT * FROM users WHERE email = (?)", (email, ), True)
     if db_response is None:
@@ -73,7 +72,6 @@ def user_login():
 
 @app.route("/vault", methods=['POST'])
 def vault_insert():
-    # Authenticate user with their authHash
     email = request.get_json()['email']
     auth_hash = request.get_json()['authHash']
     name = request.get_json()['name']

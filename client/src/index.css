@@ -1,18 +1,14 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
-  /* font-size: 18px; */
-  /* display: flex;
-  justify-content: center; */
 }
 
 .container {
-  width: 500px;
-  height: 600px;
+  width: 450px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   text-align: center;
   padding: 10px;
-  /* border: 1px solid; */
 }
 
 .homeButtons {
