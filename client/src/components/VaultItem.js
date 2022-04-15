@@ -156,7 +156,7 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
         </Alert>
       </Snackbar>
       <Snackbar
-        open={errorAlert}
+        open={Boolean(errorAlert)}
         autoHideDuration={6000}
         onClose={handleCloseErrorAlert}
       >

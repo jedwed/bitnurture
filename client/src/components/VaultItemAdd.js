@@ -1,3 +1,4 @@
+/*global chrome*/
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -119,7 +120,7 @@ const VaultItemAdd = ({ onAdd, onGenerate }) => {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={errorAlert}
+        open={Boolean(errorAlert)}
         autoHideDuration={6000}
         onClose={handleCloseErrorAlert}
       >

@@ -115,7 +115,11 @@ const Signup = ({ onSignup }) => {
       </div>
       <FormFooter onSubmit={handleSubmit} />
       {redirect && <Navigate replace to="/" />}
-      <Snackbar open={alert} autoHideDuration={6000} onClose={handleCloseAlert}>
+      <Snackbar
+        open={Boolean(alert)}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+      >
         <Alert onClose={handleCloseAlert} severity="error">
           {alert}
         </Alert>

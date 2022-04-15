@@ -75,7 +75,7 @@ const Login = ({ onLogin }) => {
       <FormFooter onSubmit={handleSubmit} />
       {redirect && <Navigate replace to="/vault" />}
       <Snackbar
-        open={errorAlert}
+        open={Boolean(errorAlert)}
         autoHideDuration={6000}
         onClose={handleCloseErrorAlert}
       >
