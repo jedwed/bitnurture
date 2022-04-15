@@ -5,6 +5,8 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import React from "react";
 import FormFooter from "./FormFooter";
 
@@ -13,27 +15,33 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = async () => {
     if (!email) {
-      alert("Please enter your email");
+      setErrorAlert("Please enter your email");
       return;
     }
 
     if (!password) {
-      alert("Please enter your password");
+      setErrorAlert("Please enter your password");
+      return;
     }
 
     const err = await onLogin(email, password);
     if (err) {
-      alert(err);
+      setErrorAlert(err);
       return;
     }
 
     setEmail("");
     setPassword("");
     setRedirect(true);
+  };
+
+  const handleCloseErrorAlert = () => {
+    setErrorAlert("");
   };
 
   return (
@@ -66,6 +74,15 @@ const Login = ({ onLogin }) => {
       </div>
       <FormFooter onSubmit={handleSubmit} />
       {redirect && <Navigate replace to="/vault" />}
+      <Snackbar
+        open={errorAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorAlert}
+      >
+        <Alert onClose={handleCloseErrorAlert} severity="error">
+          {errorAlert}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

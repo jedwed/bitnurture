@@ -22,6 +22,7 @@ import Alert from "@mui/material/Alert";
 const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
   const [open, setOpen] = useState(false);
   const [copyAlert, setCopyAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
   const [name, setName] = useState(vaultItem.name);
   const [username, setUsername] = useState(vaultItem.username);
   const [password, setPassword] = useState(vaultItem.password);
@@ -38,17 +39,17 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
 
   const handleSubmit = async () => {
     if (!name) {
-      alert("Please enter the name of the Vault Item");
+      setErrorAlert("Please enter the name of the Vault Item");
       return;
     }
 
     if (!username) {
-      alert("Please enter the username of the Vault Item");
+      setErrorAlert("Please enter the username of the Vault Item");
       return;
     }
 
     if (!password) {
-      alert("Please enter the password of the Vault Item");
+      setErrorAlert("Please enter the password of the Vault Item");
       return;
     }
 
@@ -74,6 +75,10 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
 
   const handleCloseCopyAlert = () => {
     setCopyAlert(false);
+  };
+
+  const handleCloseErrorAlert = () => {
+    setErrorAlert("");
   };
 
   return (
@@ -148,6 +153,15 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
       >
         <Alert onClose={handleCloseCopyAlert} severity="success">
           Password successfully copied!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={errorAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorAlert}
+      >
+        <Alert onClose={handleCloseErrorAlert} severity="error">
+          {errorAlert}
         </Alert>
       </Snackbar>
     </>

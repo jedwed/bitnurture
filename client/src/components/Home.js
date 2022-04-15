@@ -8,9 +8,10 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="home">
-      A password stores that securely nurtures all your passwords with the
-      beauty of encryption. All you have to remember is one password.
-      <br />
+      <Typography variant="caption">
+        A password stores that securely nurtures all your passwords with the
+        beauty of encryption. All you have to remember is one password.
+      </Typography>
       <div className="homeButtons">
         <Button
           component={Link}

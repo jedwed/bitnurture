@@ -3,7 +3,7 @@ body {
 }
 
 .container {
-  width: 450px;
+  width: 400px;
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -18,9 +18,8 @@ body {
 }
 
 .footer {
-  margin-top: 10px;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .inputFields {

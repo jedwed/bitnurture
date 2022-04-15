@@ -143,7 +143,6 @@ function App() {
       const error = responseJson["error"];
       return error;
     }
-    const returnedVault = await response.json();
     setActiveEmail(email);
     setActiveMasterKey(currMasterKey);
     setActiveAuthHash(currAuthHash);
@@ -160,9 +159,9 @@ function App() {
   const generatePassword = () => {
     const length = 16;
     const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*(),./;'[]-=<>?:{}_+";
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()`~-_=+[{]};:,<.>/?";
     let password = "";
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < length; i++) {
       password += charset.charAt(Math.floor(Math.random() * charset.length));
     }
     return password;

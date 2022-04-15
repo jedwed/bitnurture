@@ -11,6 +11,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 const VaultItemAdd = ({ onAdd, onGenerate }) => {
   const [open, setOpen] = useState(false);
@@ -18,6 +20,7 @@ const VaultItemAdd = ({ onAdd, onGenerate }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleClickOpen = () => {
@@ -30,17 +33,17 @@ const VaultItemAdd = ({ onAdd, onGenerate }) => {
 
   const handleSubmit = async () => {
     if (!name) {
-      alert("Please enter the name of the Vault Item");
+      setErrorAlert("Please enter the name of the Vault Item");
       return;
     }
 
     if (!username) {
-      alert("Please enter the username of the Vault Item");
+      setErrorAlert("Please enter the username of the Vault Item");
       return;
     }
 
     if (!password) {
-      alert("Please enter the password of the Vault Item");
+      setErrorAlert("Please enter the password of the Vault Item");
       return;
     }
 
@@ -55,6 +58,10 @@ const VaultItemAdd = ({ onAdd, onGenerate }) => {
   const handleGenerate = () => {
     const generatedPassword = onGenerate();
     setPassword(generatedPassword);
+  };
+
+  const handleCloseErrorAlert = () => {
+    setErrorAlert("");
   };
 
   return (
@@ -111,6 +118,15 @@ const VaultItemAdd = ({ onAdd, onGenerate }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={errorAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorAlert}
+      >
+        <Alert onClose={handleCloseErrorAlert} severity="error">
+          {errorAlert}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

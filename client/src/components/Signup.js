@@ -3,13 +3,13 @@ import { useState } from "react";
 import FormFooter from "./FormFooter";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { Navigate } from "react-router-dom";
-import { FormControl } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 const Signup = ({ onSignup }) => {
   const [email, setEmail] = useState("");
@@ -17,6 +17,7 @@ const Signup = ({ onSignup }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [redirect, setRedirect] = useState(false);
+  const [alert, setAlert] = useState("");
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const checkPassword = () => {
@@ -28,24 +29,24 @@ const Signup = ({ onSignup }) => {
 
   const handleSubmit = async () => {
     if (!email) {
-      alert("Please enter your email");
+      setAlert("Please enter your email");
       return;
     }
 
     if (!checkPassword()) {
-      alert("Master password must be at least 12 characters");
+      setAlert("Master password must be at least 12 characters");
       return;
     }
 
     if (password !== confirmPassword) {
-      alert("The two passwords do not match");
+      setAlert("The two passwords do not match");
       return;
     }
 
     const err = await onSignup(email, password);
     // An error will occur if the email is already registered
     if (err) {
-      alert(err);
+      setAlert(err);
       return;
     }
 
@@ -53,6 +54,10 @@ const Signup = ({ onSignup }) => {
     setPassword("");
     setConfirmPassword("");
     setRedirect(true);
+  };
+
+  const handleCloseAlert = () => {
+    setAlert("");
   };
 
   return (
@@ -110,6 +115,11 @@ const Signup = ({ onSignup }) => {
       </div>
       <FormFooter onSubmit={handleSubmit} />
       {redirect && <Navigate replace to="/" />}
+      <Snackbar open={alert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity="error">
+          {alert}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -22,6 +22,7 @@ const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete, onGenerate }) => {
             key={vaultItem.id}
             onEdit={onEdit}
             onDelete={onDelete}
+            onGenerate={onGenerate}
           />
         ))}
       </List>
