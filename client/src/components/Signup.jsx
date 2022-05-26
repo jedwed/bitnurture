@@ -61,7 +61,7 @@ const Signup = ({ onSignup }) => {
   };
 
   return (
-    <div>
+    <>
       <div className="inputFields">
         <TextField
           type="email"
@@ -124,7 +124,7 @@ const Signup = ({ onSignup }) => {
           {alert}
         </Alert>
       </Snackbar>
-    </div>
+    </>
   );
 };
 

@@ -8,7 +8,9 @@ body {
   display: flex;
   flex-direction: column;
   text-align: center;
+  justify-content: space-between;
   padding: 10px;
+  position: relative;
 }
 
 .homeButtons {
@@ -23,5 +25,15 @@ body {
 }
 
 .inputFields {
+  flex-grow: 1;
   margin: 10px;
+}
+
+.home {
+  flex-grow: 1;
+}
+
+.vault {
+  overflow: scroll;
+  overflow-x: hidden;
 }

@@ -14,8 +14,8 @@ const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete, onGenerate }) => {
   };
 
   return (
-    <div>
-      <List>
+    <>
+      <List className="vault">
         {vault.map((vaultItem) => (
           <VaultItem
             vaultItem={vaultItem}
@@ -32,7 +32,7 @@ const Vault = ({ vault, onAdd, onLogout, onEdit, onDelete, onGenerate }) => {
         onGenerate={onGenerate}
       />
       {logoutRedirect && <Navigate replace to="/" />}
-    </div>
+    </>
   );
 };
 

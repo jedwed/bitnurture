@@ -84,7 +84,7 @@ const VaultItem = ({ vaultItem, onEdit, onDelete, onGenerate }) => {
   return (
     <>
       <ListItem>
-        <ListItemText primary={vaultItem.name} secondary={vaultItem.username} />
+        <ListItemText primary={vaultItem.name} secondary={vaultItem.username} sx={{ overflow: 'hidden', whiteSpace: 'nowrap' }} />
         <IconButton onClick={handleCopy}>
           <ContentCopyIcon edge="end" />
         </IconButton>

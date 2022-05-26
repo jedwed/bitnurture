@@ -45,7 +45,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div>
+    <>
       <div className="inputFields">
         <TextField
           type="email"
@@ -83,7 +83,7 @@ const Login = ({ onLogin }) => {
           {errorAlert}
         </Alert>
       </Snackbar>
-    </div>
+    </>
   );
 };
 
