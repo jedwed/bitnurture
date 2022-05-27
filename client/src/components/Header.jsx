@@ -1,7 +1,12 @@
-import React from "react";
+import logo from "../logo.png";
 
 const Header = () => {
-  return <h1 className="header">BitNurture</h1>;
+  return (
+    <div className="header">
+      <img src={logo} alt="logo" />
+      <h1>BitNurture</h1>
+    </div>
+  );
 };
 
 export default Header;
