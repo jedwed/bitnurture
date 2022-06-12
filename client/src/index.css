@@ -45,6 +45,5 @@ body {
 }
 
 .vault {
-  overflow: scroll;
   overflow-x: hidden;
 }

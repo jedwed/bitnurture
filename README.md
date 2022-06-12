@@ -5,6 +5,8 @@ A Google Chrome browser extension for storing your passwords in a **securely enc
 The browser extension is written using ReactJS, the backend server is written using Python Flask.
 (COMP6841 Something Awesome Project)
 
+![](sample.png)
+
 # Encryption
 BitNurture uses your **master password** to generate an **AES-256 CBC master key** used to securely encrypt and decrypt all your vault items. The master key is generated with **PBKDF2: Password Based Key Derivation Function 2**  (100 000 iterations).
 

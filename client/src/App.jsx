@@ -188,6 +188,12 @@ function App() {
       mode: "cors",
       body: JSON.stringify(requestBody),
     });
+
+    if (!response.ok) {
+      const responseJson = await response.json();
+      const error = responseJson["error"];
+      return error;
+    }
   };
 
   // Delete item in vault
@@ -206,6 +212,12 @@ function App() {
       mode: "cors",
       body: JSON.stringify(requestBody),
     });
+
+    if (!response.ok) {
+      const responseJson = await response.json();
+      const error = responseJson["error"];
+      return error;
+    }
   };
 
   // Edit item in vault
@@ -230,6 +242,12 @@ function App() {
       mode: "cors",
       body: JSON.stringify(requestBody),
     });
+
+    if (!response.ok) {
+      const responseJson = await response.json();
+      const error = responseJson["error"];
+      return error;
+    }
   };
 
   return (
